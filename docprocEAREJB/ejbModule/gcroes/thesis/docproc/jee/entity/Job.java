@@ -12,204 +12,203 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * The persistent class for the job database table.
  * 
  */
 @Entity
-@Table(name="job")
+@Table(name = "job")
 @NamedQueries({
-	@NamedQuery(name="Job.findAllCount", query="SELECT COUNT(j) FROM Job j"),
-	@NamedQuery(name="Job.findAll", query="SELECT j FROM Job j")
-})
+        @NamedQuery(name = "Job.findAllCount", query = "SELECT COUNT(j) FROM Job j"),
+        @NamedQuery(name = "Job.findAll", query = "SELECT j FROM Job j") })
 @XmlRootElement
 public class Job implements Serializable {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 4759988173095022931L;
+    private static final long serialVersionUID = 4759988173095022931L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="job_id")
-	private int jobId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "job_id")
+    private int jobId;
 
-	private boolean failed;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(name="finish_before")
-	private Date finishBefore;
+    private boolean failed;
 
-	private boolean finished;
-	
-	@Temporal(TemporalType.DATE)
-	@Column(name="finished_at")
-	private Date finishedAt;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "finish_before")
+    private Date finishBefore;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="start_after")
-	private Date startAfter;
+    private boolean finished;
 
-	private boolean started;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "finished_at")
+    private Date finishedAt;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="started_at")
-	private Date startedAt;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "start_after")
+    private Date startAfter;
 
-	@Lob
-	private byte[] stats;
+    private boolean started;
 
-	@Lob
-	@Column(name="workflow_name")
-	private String workflowName;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "started_at")
+    private Date startedAt;
 
-	@OneToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="start_task_id")
-	private Task startTask;
+    @Lob
+    private byte[] stats;
 
-	@OneToMany(mappedBy="job")
-	private List<Task> tasks;
-	
-	public Job(){	}
+    @Lob
+    @Column(name = "workflow_name")
+    private String workflowName;
 
-	public Job(String workflowName) {
-		this.failed = false;
-		this.finishBefore = null;
-		this.finished = false;
-		this.finishedAt = null;
-		this.startAfter = null;
-		this.started = false;
-		this.startedAt = null;
-		this.stats = null;
-		this.workflowName = workflowName;
-		this.startTask = null;
-		this.tasks = new ArrayList<Task>();
-	}
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "start_task_id")
+    private Task startTask;
 
-	public int getJobId() {
-		return this.jobId;
-	}
+    @OneToMany(mappedBy = "job")
+    private List<Task> tasks;
 
-	public void setJobId(int jobId) {
-		this.jobId = jobId;
-	}
+    public Job() {
+    }
 
-	public boolean isFailed() {
-		return this.failed;
-	}
+    public Job(String workflowName) {
+        this.failed = false;
+        this.finishBefore = null;
+        this.finished = false;
+        this.finishedAt = null;
+        this.startAfter = null;
+        this.started = false;
+        this.startedAt = null;
+        this.stats = null;
+        this.workflowName = workflowName;
+        this.startTask = null;
+        this.tasks = new ArrayList<Task>();
+    }
 
-	public void setFailed(boolean failed) {
-		this.failed = failed;
-	}
+    public int getJobId() {
+        return this.jobId;
+    }
 
-	public Date getFinishBefore() {
-		return this.finishBefore;
-	}
+    public void setJobId(int jobId) {
+        this.jobId = jobId;
+    }
 
-	public void setFinishBefore(Date finishBefore) {
-		this.finishBefore = finishBefore;
-	}
+    public boolean isFailed() {
+        return this.failed;
+    }
 
-	public boolean isFinished() {
-		return this.finished;
-	}
+    public void setFailed(boolean failed) {
+        this.failed = failed;
+    }
 
-	public void setFinished(boolean finished) {
-		this.finished = finished;
-	}
+    public Date getFinishBefore() {
+        return this.finishBefore;
+    }
 
-	public Date getFinishedAt() {
-		return this.finishedAt;
-	}
+    public void setFinishBefore(Date finishBefore) {
+        this.finishBefore = finishBefore;
+    }
 
-	public void setFinishedAt(Date finishedAt) {
-		this.finishedAt = finishedAt;
-	}
+    public boolean isFinished() {
+        return this.finished;
+    }
 
-	public Date getStartAfter() {
-		return this.startAfter;
-	}
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
 
-	public void setStartAfter(Date startAfter) {
-		this.startAfter = startAfter;
-	}
+    public Date getFinishedAt() {
+        return this.finishedAt;
+    }
 
-	public boolean isStarted() {
-		return this.started;
-	}
+    public void setFinishedAt(Date finishedAt) {
+        this.finishedAt = finishedAt;
+    }
 
-	public void setStarted(boolean started) {
-		this.started = started;
-	}
+    public Date getStartAfter() {
+        return this.startAfter;
+    }
 
-	public Date getStartedAt() {
-		return this.startedAt;
-	}
+    public void setStartAfter(Date startAfter) {
+        this.startAfter = startAfter;
+    }
 
-	public void setStartedAt(Date startedAt) {
-		this.startedAt = startedAt;
-	}
+    public boolean isStarted() {
+        return this.started;
+    }
 
-	public Object getStats() {
-		try {
-			return Serializer.deserialize(this.stats);
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
 
-	public void setStats(Object stats) {
-		try {
-			this.stats = Serializer.serialize(stats);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    public Date getStartedAt() {
+        return this.startedAt;
+    }
 
-	public String getWorkflowName() {
-		return this.workflowName;
-	}
+    public void setStartedAt(Date startedAt) {
+        this.startedAt = startedAt;
+    }
 
-	public void setWorkflowName(String workflowName) {
-		this.workflowName = workflowName;
-	}
+    public Object getStats() {
+        try {
+            return Serializer.deserialize(this.stats);
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-	public Task getStartTask() {
-		return this.startTask;
-	}
+    public void setStats(Object stats) {
+        try {
+            this.stats = Serializer.serialize(stats);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-	public void setStartTask(Task task) {
-		this.startTask = task;
-	}
+    public String getWorkflowName() {
+        return this.workflowName;
+    }
 
-	public List<Task> getTasks() {
-		return this.tasks;
-	}
+    public void setWorkflowName(String workflowName) {
+        this.workflowName = workflowName;
+    }
 
-	public void setTasks(List<Task> tasks) {
-		this.tasks = tasks;
-	}
+    public Task getStartTask() {
+        return this.startTask;
+    }
 
-	public Task addTask(Task task) {
-		getTasks().add(task);
-		task.setJob(this);
+    public void setStartTask(Task task) {
+        this.startTask = task;
+    }
 
-		return task;
-	}
+    public List<Task> getTasks() {
+        return this.tasks;
+    }
 
-	public Task removeTask(Task task) {
-		getTasks().remove(task);
-		task.setJob(null);
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
 
-		return task;
-	}
+    public Task addTask(Task task) {
+        getTasks().add(task);
+        task.setJob(this);
+
+        return task;
+    }
+
+    public Task removeTask(Task task) {
+        getTasks().remove(task);
+        task.setJob(null);
+
+        return task;
+    }
 
 }

@@ -8,8 +8,11 @@ import javax.ejb.Remote;
 
 @Remote
 public interface ServiceRemote {
-	
-	public List<Job> getAllJobs();
-	public int getNbOfJobs();
-	public boolean addAJob(String workflowNam);
+
+    public List<Job> getAllJobs();
+
+    public int getNbOfJobs();
+
+    public boolean addAJob(String workflowNam);
+    
 }

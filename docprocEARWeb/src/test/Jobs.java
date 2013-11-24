@@ -16,12 +16,12 @@ import gcroes.thesis.docproc.jee.ServiceRemote;
 import gcroes.thesis.docproc.jee.entity.Job;
 
 @Path("/jobs")
-@Stateless //Can't reference EJB without this...
+@Stateless // Can't reference EJB without this...
 public class Jobs {
-	
-	@EJB
-	ServiceRemote service;
-	
+
+    @EJB
+    ServiceRemote service;
+
     /**
      * Method handling HTTP GET requests.
      */
@@ -29,28 +29,35 @@ public class Jobs {
     @Produces(MediaType.APPLICATION_JSON)
     public String getJobs() {
         List<Job> jobs = service.getAllJobs();
-        
+
         JsonArrayBuilder builder = Json.createArrayBuilder();
-        
+
         for (Job job : jobs) {
-                    JsonObjectBuilder jobBuilder = Json.createObjectBuilder()
-                            .add("id", job.getJobId())
+            JsonObjectBuilder jobBuilder = Json
+                    .createObjectBuilder()
+                    .add("id", job.getJobId())
                     .add("workflow", job.getWorkflowName())
-                    .add("start_after", job.getStartAfter() != null ? job.getStartAfter().getTime() / 1000 :  0)
-                    .add("finish_before", job.getFinishBefore() != null ? job.getFinishBefore().getTime() / 1000 : 0)
+                    .add("start_after",
+                            job.getStartAfter() != null ? job.getStartAfter()
+                                    .getTime() / 1000 : 0)
+                    .add("finish_before",
+                            job.getFinishBefore() != null ? job
+                                    .getFinishBefore().getTime() / 1000 : 0)
                     .add("started", job.isStarted())
                     .add("finished", job.isFinished())
                     .add("failed", job.isFailed());
-            
+
             if (job.isStarted()) {
-                    jobBuilder.add("started_at", job.getStartedAt().getTime() / 1000);
+                jobBuilder.add("started_at",
+                        job.getStartedAt().getTime() / 1000);
             }
             if (job.isFinished()) {
-                    jobBuilder.add("finished_at", job.getFinishedAt().getTime() / 1000);
+                jobBuilder.add("finished_at",
+                        job.getFinishedAt().getTime() / 1000);
             }
-                builder.add(jobBuilder);
+            builder.add(jobBuilder);
         }
-        
+
         return builder.build().toString();
     }
 }
