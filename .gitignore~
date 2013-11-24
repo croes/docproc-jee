@@ -1,9 +1,7 @@
 bin/
 .classpath
 .project
-.settings
-.metadata
 RemoteSystemsTempFiles
 ~
 build
-
+.settings
