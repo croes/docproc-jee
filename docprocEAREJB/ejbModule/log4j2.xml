@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <Configuration>
-      <Appenders>
-        <File name="FileLogger" fileName="../logs/dopcroc.log" append="false">
-          <PatternLayout pattern="%d %t %-5p %c{2} - %m%n"/>
+<Configuration>
+    <Appenders>
+        <File name="FileLogger" fileName="../logs/dopcroc.log"
+            append="false">
+            <PatternLayout pattern="%d %t %-5p %c{2} - %m%n" />
         </File>
         <Console name="STDOUT" target="SYSTEM_OUT">
-          <PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
+            <PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %m%n" />
         </Console>
-      </Appenders>
-      <Loggers>
+    </Appenders>
+    <Loggers>
         <Logger name="gcroes.thesis.docproc.jee" level="trace">
-          <AppenderRef ref="FileLogger"/>
+            <AppenderRef ref="FileLogger" />
         </Logger>
         <Root level="trace">
-          <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="STDOUT" />
         </Root>
-      </Loggers>
-    </Configuration>
+    </Loggers>
+</Configuration>
