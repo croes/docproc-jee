@@ -13,6 +13,8 @@ public interface ServiceRemote {
 
     public int getNbOfJobs();
 
-    public boolean addAJob(String workflowNam);
+    public boolean addAJob(String workflowName);
+    
+    public void addJob(Job job);
     
 }

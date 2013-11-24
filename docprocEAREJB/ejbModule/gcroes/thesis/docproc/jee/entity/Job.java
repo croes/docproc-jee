@@ -211,4 +211,12 @@ public class Job implements Serializable {
         return task;
     }
 
+    public Task newStartTask() {
+        this.startTask = new Task(this, null, "start"); // FIXME
+                                                        // "start" ->
+                                                        // this.getWorkflowConfig().getWorkflowStart());
+        // FIXME this.startTask.initJoin();
+        return this.startTask;
+    }
+
 }

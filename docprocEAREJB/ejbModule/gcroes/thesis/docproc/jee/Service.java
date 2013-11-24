@@ -58,4 +58,11 @@ public class Service implements ServiceRemote {
         return true;
     }
 
+    @Override
+    public void addJob(Job job) {
+        logger.debug("Adding job: " + job);
+        em.persist(job);
+        em.flush();
+    }
+
 }

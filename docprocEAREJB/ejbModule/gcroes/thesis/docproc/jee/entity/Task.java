@@ -102,7 +102,7 @@ public class Task implements Serializable {
         this.workerName = workerName;
     }
 
-    @XmlTransient
+    @XmlTransient //to avoid infinite xml
     public Job getJob() {
         return this.job;
     }
