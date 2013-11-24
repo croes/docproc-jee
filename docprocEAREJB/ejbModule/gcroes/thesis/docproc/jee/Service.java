@@ -20,7 +20,6 @@ import org.apache.logging.log4j.Logger;
  */
 @Stateless
 @LocalBean
-@WebService
 public class Service implements ServiceRemote {
 	
 	private static Logger logger = LogManager.getLogger(Service.class.getName());
@@ -32,9 +31,8 @@ public class Service implements ServiceRemote {
      * Default constructor. 
      */
     public Service() {
-        // TODO Auto-generated constructor stub
     }
-
+    
 	@Override
 	public List<Job> getAllJobs() {
 		logger.debug("Fetching all jobs");

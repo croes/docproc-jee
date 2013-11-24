@@ -96,7 +96,7 @@ public class Job implements Serializable {
 		this.jobId = jobId;
 	}
 
-	public boolean getFailed() {
+	public boolean isFailed() {
 		return this.failed;
 	}
 
@@ -112,7 +112,7 @@ public class Job implements Serializable {
 		this.finishBefore = finishBefore;
 	}
 
-	public boolean getFinished() {
+	public boolean isFinished() {
 		return this.finished;
 	}
 
@@ -136,7 +136,7 @@ public class Job implements Serializable {
 		this.startAfter = startAfter;
 	}
 
-	public boolean getStarted() {
+	public boolean isStarted() {
 		return this.started;
 	}
 
