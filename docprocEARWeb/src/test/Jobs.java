@@ -12,15 +12,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import gcroes.thesis.docproc.jee.ServiceRemote;
+import gcroes.thesis.docproc.jee.Service;
 import gcroes.thesis.docproc.jee.entity.Job;
 
 @Path("/jobs")
-@Stateless // Can't reference EJB without this...
+@Stateless // Can't reference EJB without this... GF issue
 public class Jobs {
 
     @EJB
-    ServiceRemote service;
+    Service service;
 
     /**
      * Method handling HTTP GET requests.
