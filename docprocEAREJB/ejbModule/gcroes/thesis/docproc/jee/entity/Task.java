@@ -81,6 +81,10 @@ public class Task implements Serializable {
     public Date getFinishedAt() {
         return this.finishedAt;
     }
+    
+    public boolean isFinished(){
+        return this.finishedAt != null;
+    }
 
     public void setFinishedAt(Timestamp finishedAt) {
         this.finishedAt = finishedAt;

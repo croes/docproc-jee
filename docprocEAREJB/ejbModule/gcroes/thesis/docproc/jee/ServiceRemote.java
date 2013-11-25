@@ -16,5 +16,7 @@ public interface ServiceRemote {
     public boolean addAJob(String workflowName);
     
     public void addJob(Job job);
+
+    public Job findJobByID(int id);
     
 }

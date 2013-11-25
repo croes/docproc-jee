@@ -64,5 +64,13 @@ public class Service implements ServiceRemote {
         em.persist(job);
         em.flush();
     }
+    
+    @Override
+    public Job findJobByID(int id) {
+        logger.debug("Fetching job. ID: " + id);
+        return em.createNamedQuery("Job.findByID", Job.class)
+                 .setParameter("id", id)
+                 .getSingleResult();
+    }
 
 }

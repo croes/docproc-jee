@@ -20,7 +20,8 @@ import java.util.List;
 @Table(name = "job")
 @NamedQueries({
         @NamedQuery(name = "Job.findAllCount", query = "SELECT COUNT(j) FROM Job j"),
-        @NamedQuery(name = "Job.findAll", query = "SELECT j FROM Job j") })
+        @NamedQuery(name = "Job.findAll", query = "SELECT j FROM Job j"),
+        @NamedQuery(name = "Job.findByID", query = "SELECT j FROM Job j WHERE j.jobId = :id")})
 @XmlRootElement
 public class Job implements Serializable {
 
@@ -217,6 +218,13 @@ public class Job implements Serializable {
                                                         // this.getWorkflowConfig().getWorkflowStart());
         // FIXME this.startTask.initJoin();
         return this.startTask;
+    }
+
+    public List<Task> getHistory() {
+        ArrayList<Task> result = new ArrayList<Task>();
+        if(this.startTask != null && this.startTask.isFinished())
+            result.add(this.startTask);
+        return result;
     }
 
 }
