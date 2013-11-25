@@ -86,16 +86,16 @@ public class Task implements Serializable {
         return this.finishedAt != null;
     }
 
-    public void setFinishedAt(Timestamp finishedAt) {
-        this.finishedAt = finishedAt;
+    public void setFinishedAt() {
+        this.finishedAt = new Date();
     }
 
     public Date getStartedAt() {
         return this.startedAt;
     }
 
-    public void setStartedAt(Timestamp startedAt) {
-        this.startedAt = startedAt;
+    public void setStartedAt() {
+        this.startedAt = new Date();
     }
 
     public String getWorkerName() {
@@ -121,6 +121,11 @@ public class Task implements Serializable {
 
     public void setParentTask(Task task) {
         this.parentTask = task;
+    }
+
+    public void saveTiming() {
+        // TODO Auto-generated method stub
+        
     }
 
 }

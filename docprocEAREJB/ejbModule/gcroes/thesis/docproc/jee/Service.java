@@ -2,6 +2,8 @@ package gcroes.thesis.docproc.jee;
 
 import gcroes.thesis.docproc.jee.entity.Job;
 import gcroes.thesis.docproc.jee.entity.Task;
+import gcroes.thesis.docproc.jee.schedule.WeightedRoundRobin;
+import gcroes.thesis.docproc.jee.tasks.JobStateListener;
 
 import java.util.List;
 
@@ -71,6 +73,46 @@ public class Service implements ServiceRemote {
         return em.createNamedQuery("Job.findByID", Job.class)
                  .setParameter("id", id)
                  .getSingleResult();
+    }
+
+    public String getNextWorker(int workflowId, String name, String nextWorker) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void addWorkflowStateListener(JobStateListener listener) {
+        // TODO Auto-generated method stub
+        
+    }
+    
+    public void removeWorkflowStateListener(JobStateListener listener) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public WeightedRoundRobin getPriorities(String workerType) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void removeJobPriority(Job job, List<String> workerTypes) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void setPriorities(String workerType, WeightedRoundRobin wrr) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public Task getTask(String name) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void jobFinished(Job job) {
+        // TODO Auto-generated method stub
+        
     }
 
 }
