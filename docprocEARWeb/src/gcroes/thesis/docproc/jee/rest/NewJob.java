@@ -1,4 +1,4 @@
-package test;
+package gcroes.thesis.docproc.jee.rest;
 
 import java.util.Date;
 
@@ -11,8 +11,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
-import gcroes.thesis.docproc.jee.entity.Job;
 import gcroes.thesis.docproc.jee.entity.Task;
+import gcroes.thesis.docproc.jee.entity.Job;
 import gcroes.thesis.docproc.jee.Service;
 
 @Path("/newjob/{workflow}")

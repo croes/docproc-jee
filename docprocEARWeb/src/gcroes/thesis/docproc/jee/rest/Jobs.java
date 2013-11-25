@@ -1,4 +1,4 @@
-package test;
+package gcroes.thesis.docproc.jee.rest;
 
 import java.util.List;
 
