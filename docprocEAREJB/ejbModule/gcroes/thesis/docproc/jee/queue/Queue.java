@@ -19,6 +19,7 @@ Technical Contact: bart.vanbrabant@cs.kuleuven.be
 
 package gcroes.thesis.docproc.jee.queue;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -36,8 +37,13 @@ import gcroes.thesis.docproc.jee.entity.Task;
 *
 * @author Bart Vanbrabant <bart.vanbrabant@cs.kuleuven.be>
 */
-public class Queue {
+public class Queue implements Serializable{
     
+     /**
+     * 
+     */
+    private static final long serialVersionUID = -3132301977466297101L;
+
         private static Logger logger = LogManager
             .getLogger(Queue.class.getName());
         
@@ -45,15 +51,12 @@ public class Queue {
         EntityManager em;
         
         private JPAQueue queue;
-        
+        private String queueName;
         public Queue(String queueName) {
-               this.queue = new JPAQueue(queueName);
+           this.queueName = queueName;                
         }
         
-        public void persist(){
-            logger.debug("persisting queue");
-            em.persist(queue);
-        }
+        public Queue(){}
         
         public void addTask(Task task){
             List<JPAQueueElement> jpaQueue = queue.getQueue();
@@ -86,6 +89,24 @@ public class Queue {
          */
         public void leaseTasks(long lease, TimeUnit unit, int limit, String taskType, Job job){
             
+        }
+        
+        public void init(){
+            if(em == null){
+                logger.fatal("Entitymanager null in init");
+            }
+            JPAQueue queue =  em.createNamedQuery("JPAQueue.findByName", JPAQueue.class)
+                   .setParameter("name", queueName)
+                   .getSingleResult();
+            if(queue != null){
+                this.queue = queue;
+                logger.info("Found queue: " + queueName);
+            }else{
+                this.queue = new JPAQueue(queueName);
+                em.persist(this.queue);
+                em.flush();
+                logger.info("Persisted new queue: " + queueName);
+            }
         }
 
 }

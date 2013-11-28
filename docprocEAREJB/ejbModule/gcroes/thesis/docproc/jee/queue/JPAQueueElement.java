@@ -2,6 +2,7 @@ package gcroes.thesis.docproc.jee.queue;
 
 import gcroes.thesis.docproc.jee.entity.Task;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -16,14 +17,21 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @Table(name="queueElement")
 @NamedQueries(value = {
     @NamedQuery(name="JPAQueueElement.findElemWithTask", query="SELECT e FROM JPAQueueElement e WHERE e.task = :task")
 })
-public class JPAQueueElement {
+@XmlRootElement
+public class JPAQueueElement implements Serializable{
     
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 4488279669783467708L;
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")

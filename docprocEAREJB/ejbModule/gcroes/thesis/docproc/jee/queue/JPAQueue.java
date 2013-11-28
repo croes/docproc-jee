@@ -1,6 +1,8 @@
 package gcroes.thesis.docproc.jee.queue;
 
 import gcroes.thesis.docproc.jee.entity.Job;
+
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,12 +11,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
-
-public class JPAQueue {
+@XmlRootElement
+@NamedQueries(value={
+        @NamedQuery(name="JPAQueue.findByName", query="SELECT q FROM JPAQueue q WHERE q.name = :name")
+})
+public class JPAQueue implements Serializable{
     
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -5094481856294285307L;
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")

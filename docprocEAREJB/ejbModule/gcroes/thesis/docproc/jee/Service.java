@@ -6,8 +6,10 @@ import gcroes.thesis.docproc.jee.queue.Queue;
 import gcroes.thesis.docproc.jee.schedule.WeightedRoundRobin;
 import gcroes.thesis.docproc.jee.tasks.JobStateListener;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
@@ -23,12 +25,17 @@ import org.apache.logging.log4j.Logger;
 @Stateless
 @LocalBean
 @WebService
-public class Service implements ServiceRemote {
+public class Service implements ServiceRemote, Serializable {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 820984664601318701L;
 
     private static Logger logger = LogManager
             .getLogger(Service.class.getName());
     
-    private Queue queue = new Queue("task-queue");
+    private Queue queue;
 
     @PersistenceContext
     EntityManager em;
@@ -37,7 +44,12 @@ public class Service implements ServiceRemote {
      * Default constructor.
      */
     public Service() {
-        
+        this.queue = new Queue("task-queue");
+    }
+    
+    @PostConstruct
+    public void init(){
+        queue.init();
     }
 
     @Override
@@ -84,15 +96,15 @@ public class Service implements ServiceRemote {
         return null;
     }
 
-    public void addWorkflowStateListener(JobStateListener listener) {
-        // TODO Auto-generated method stub
-        
-    }
-    
-    public void removeWorkflowStateListener(JobStateListener listener) {
-        // TODO Auto-generated method stub
-        
-    }
+//    public void addWorkflowStateListener(JobStateListener listener) {
+//        // TODO Auto-generated method stub
+//        
+//    }
+//    
+//    public void removeWorkflowStateListener(JobStateListener listener) {
+//        // TODO Auto-generated method stub
+//        
+//    }
 
     public WeightedRoundRobin getPriorities(String workerType) {
         // TODO Auto-generated method stub
