@@ -152,7 +152,7 @@ public abstract class Worker implements Runnable {
                             // allocate a new uuid that will become the 
                             // taskid of the joined task
                             UUID joinId = UUID.randomUUID();
-                            Job.storeJoin(task.getJobId(), joinId, tasks.size());                               
+                            Job.storeJoin(task.getJob(), joinId, tasks.size());                               
                             for (Task newTask : tasks) {
                                 newTask.markSplit(joinId);
                                 svc.queueTask(newTask);
@@ -174,7 +174,7 @@ public abstract class Worker implements Runnable {
                         
                         if (result.isFatal()) {
                             // if this task is fatal, kill the current workflow
-                            svc.killJob(task.getJobId());
+                            svc.killJob(task.getJob());
                         }
                     }
                     

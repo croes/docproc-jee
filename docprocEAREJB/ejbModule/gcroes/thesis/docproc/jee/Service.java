@@ -2,6 +2,7 @@ package gcroes.thesis.docproc.jee;
 
 import gcroes.thesis.docproc.jee.entity.Job;
 import gcroes.thesis.docproc.jee.entity.Task;
+import gcroes.thesis.docproc.jee.queue.Queue;
 import gcroes.thesis.docproc.jee.schedule.WeightedRoundRobin;
 import gcroes.thesis.docproc.jee.tasks.JobStateListener;
 
@@ -26,6 +27,8 @@ public class Service implements ServiceRemote {
 
     private static Logger logger = LogManager
             .getLogger(Service.class.getName());
+    
+    private Queue queue = new Queue("task-queue");
 
     @PersistenceContext
     EntityManager em;
@@ -34,6 +37,7 @@ public class Service implements ServiceRemote {
      * Default constructor.
      */
     public Service() {
+        
     }
 
     @Override
@@ -113,6 +117,21 @@ public class Service implements ServiceRemote {
     public void jobFinished(Job job) {
         // TODO Auto-generated method stub
         
+    }
+
+    public void killJob(Job job) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void deleteTask(Task task) {
+        logger.debug("deleteTask()");
+        queue.finishTask(task);        
+    }
+
+    public void queueTask(Task task) {
+        logger.debug("queueTask()");
+        queue.addTask(task);        
     }
 
 }
