@@ -1,8 +1,7 @@
 package gcroes.thesis.docproc.jee.config;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import gcroes.thesis.docproc.jee.App;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -10,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -25,7 +24,8 @@ public class Config {
         private Map<String, WorkerConfig> workers = null;
         private Map<String, WorkflowConfig> workflows = null;
         private SchedulerConfig scheduler = null;
-        private static Logger logger = Logger.getLogger(Config.class.getCanonicalName());
+        private static final Logger logger = LogManager.getLogger(App.class
+                .getClass().getName());
         
         private Map<String,String> properties = new HashMap<>();
         
@@ -51,23 +51,25 @@ public class Config {
                         Properties defaultProps = new Properties();
                         defaultProps.load(propstream);
                         cfg.loadProperties(defaultProps);
+                        propstream.close();
                 } catch (IOException e) {
-                        logger.severe("Unable to read properties file in jar");
+                        logger.error("Unable to read properties file in jar");
                 }
                 
                 // load props from config file (if exists)
-                try {
-                        String propsPath = System.getProperty("taskworker.properties", null);
-                        
-                        if (propsPath != null) {
-                                InputStream propstream = new FileInputStream(propsPath);
-                                Properties props = new Properties();
-                                props.load(propstream);
-                                cfg.loadProperties(props);
-                        }
-                } catch (IOException e) {
-                        throw new IllegalStateException("Unable to read properties file");
-                }
+//                try {
+//                        String propsPath = System.getProperty("taskworker.properties", null);
+//                        
+//                        if (propsPath != null) {
+//                                InputStream propstream = new FileInputStream(propsPath);
+//                                Properties props = new Properties();
+//                                props.load(propstream);
+//                                cfg.loadProperties(props);
+//                                propstream.close();
+//                        }
+//                } catch (IOException e) {
+//                        throw new IllegalStateException("Unable to read properties file");
+//                } //CAN'T ALLOW THIS IN JEE
                 
                 // add system properties to the properties list as well (have precedence)
                 cfg.loadProperties(System.getProperties());
@@ -76,22 +78,23 @@ public class Config {
                 String path = cfg.getProperty("taskworker.configfile", "config.yaml");
                 logger.info("Loading configuration file " + path);
                 
-                File file = new File(path);
-                if (!file.canRead()) {
-                        System.err.println(path + " is not readable.");
-                } else {
-                        Yaml yaml = new Yaml();
-                        Map data;
-                        try {
-                                data = (Map) yaml.load(new FileInputStream(file));
-                                cfg.setWorkers(WorkerConfig.parseWorkers((List) data.get("workers")));
-                                cfg.setWorkflows(WorkflowConfig.parseWorkflows((Map) data.get("workflows")));
-                                cfg.setScheduler(SchedulerConfig.parseScheduler((Map) data.get("scheduler")));
-                        } catch (FileNotFoundException e) {
-                                logger.log(Level.SEVERE, "Unable to load config yaml file.");
-                        }
+//                File file = new File(path);
+//                if (!file.canRead()) {
+//                        System.err.println(path + " is not readable.");
+//                } //THIS IS LOADED FROM JAR NOW, JEE SHOULDN'T ACCESS FILESYSTEM
+                try{
+                    Yaml yaml = new Yaml();
+                    Map data;
+                    InputStream yamlpropstream = Config.class.getClassLoader().getResourceAsStream(path);
+                    data = (Map) yaml.load(yamlpropstream);
+                    logger.info("YAML config: " + data);
+                    cfg.setWorkers(WorkerConfig.parseWorkers((List) data.get("workers")));
+                    cfg.setWorkflows(WorkflowConfig.parseWorkflows((Map) data.get("workflows")));
+                    cfg.setScheduler(SchedulerConfig.parseScheduler((Map) data.get("scheduler")));
+                    yamlpropstream.close();
+                }catch(IOException ioe){
+                    logger.error("Could not load YAML worker configuration.");
                 }
-
                 return cfg;
         }
         
@@ -202,5 +205,15 @@ public class Config {
                 }
                 
                 return this.workflows.get(name);
+        }
+        
+        @Override
+        public String toString(){
+            String result = "";
+            for(Entry<String, String> entry : properties.entrySet()){
+                result += entry.getKey() + ": " + entry.getValue() + "\n"; 
+            }
+            return result;
+            
         }
 }

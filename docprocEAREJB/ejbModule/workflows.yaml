@@ -1,0 +1,33 @@
+---
+workers:
+    - {name: csv-to-task, class: drm.taskworker.workers.CSVtoTaskWorker, threads: 2, code: "target/upnxt-0.4.0-SNAPSHOT-jar-with-dependencies.jar"}
+    - {name: template-to-xml, class: drm.taskworker.workers.TemplateWorker, threads: 2, code: "target/upnxt-0.4.0-SNAPSHOT-jar-with-dependencies.jar"}
+    - {name: xsl-fo-render, class: drm.taskworker.workers.XslFoRenderWorker, threads: 2, code: "target/upnxt-0.4.0-SNAPSHOT-jar-with-dependencies.jar"}
+    - {name: zip-files, class: drm.taskworker.workers.ZipWorker, threads: 2, code: "target/upnxt-0.4.0-SNAPSHOT-jar-with-dependencies.jar"}
+    - {name: join, class: drm.taskworker.workers.JoinWorker, threads: 2, code: "target/upnxt-0.4.0-SNAPSHOT-jar-with-dependencies.jar"}
+    - {name: archive, class: drm.taskworker.workers.WebdavArchiveWorker, threads: 2, code: "target/upnxt-0.4.0-SNAPSHOT-jar-with-dependencies.jar"}
+    - {name: end, class: drm.taskworker.workers.EndWorker, threads: 1, code: "target/upnxt-0.4.0-SNAPSHOT-jar-with-dependencies.jar"}
+
+
+workflows:
+    invoices:
+        steps:
+            csv-to-task: {next: template-to-xml}
+            template-to-xml: {next: xsl-fo-render}
+            xsl-fo-render: {next: join}
+            join: {next: zip-files}
+            zip-files: {next: end}
+            archive: {next: end}
+        start: csv-to-task
+        end: end
+
+scheduler:
+    class: drm.taskworker.schedule.FairShare
+    workers:
+        - csv-to-task
+        - template-to-xml
+        - xsl-fo-render
+        - join
+        - zip-files
+        - archive
+        - end
