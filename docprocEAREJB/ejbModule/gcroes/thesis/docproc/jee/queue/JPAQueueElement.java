@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name="queueElement")
 @NamedQueries(value = {
+    @NamedQuery(name="JPAQueueElement.findNotRemoved", query="SELECT e FROM JPAQueueElement e WHERE e.removed = false"),
     @NamedQuery(name="JPAQueueElement.findElemWithTask", query="SELECT e FROM JPAQueueElement e WHERE e.task = :task")
 })
 @XmlRootElement
@@ -38,6 +39,7 @@ public class JPAQueueElement implements Serializable{
     private int id;
     
     @ManyToOne
+    @JoinColumn(name="task_id")
     private Task task;
     
     @Column(name="removed")
@@ -47,10 +49,30 @@ public class JPAQueueElement implements Serializable{
     @Column(name="leased_until")
     private Date leasedUntil;
     
-    @ManyToOne
-    @JoinColumn(name="queue_id")
-    private JPAQueue queue;
-    
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
+    }
+
+    public Date getLeasedUntil() {
+        return leasedUntil;
+    }
+
+    public void setLeasedUntil(Date leasedUntil) {
+        this.leasedUntil = leasedUntil;
+    }
+
+    public boolean isRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
+    }
+
     public JPAQueueElement(){
         
     }

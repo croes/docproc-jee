@@ -2,15 +2,10 @@ package gcroes.thesis.docproc.jee;
 
 import gcroes.thesis.docproc.jee.entity.Job;
 import gcroes.thesis.docproc.jee.entity.Task;
-import gcroes.thesis.docproc.jee.queue.Queue;
 import gcroes.thesis.docproc.jee.schedule.WeightedRoundRobin;
-import gcroes.thesis.docproc.jee.tasks.JobStateListener;
-
 import java.io.Serializable;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.persistence.EntityManager;
@@ -23,7 +18,6 @@ import org.apache.logging.log4j.Logger;
  * Session Bean implementation class Service
  */
 @Stateless
-@LocalBean
 @WebService
 public class Service implements ServiceRemote, Serializable {
 
@@ -34,8 +28,6 @@ public class Service implements ServiceRemote, Serializable {
 
     private static Logger logger = LogManager
             .getLogger(Service.class.getName());
-    
-    private Queue queue;
 
     @PersistenceContext
     EntityManager em;
@@ -44,14 +36,8 @@ public class Service implements ServiceRemote, Serializable {
      * Default constructor.
      */
     public Service() {
-        this.queue = new Queue("task-queue");
     }
     
-    @PostConstruct
-    public void init(){
-        queue.init();
-    }
-
     @Override
     public List<Job> getAllJobs() {
         logger.debug("Fetching all jobs");
@@ -138,12 +124,10 @@ public class Service implements ServiceRemote, Serializable {
 
     public void deleteTask(Task task) {
         logger.debug("deleteTask()");
-        queue.finishTask(task);        
     }
 
     public void queueTask(Task task) {
         logger.debug("queueTask()");
-        queue.addTask(task);        
     }
 
 }

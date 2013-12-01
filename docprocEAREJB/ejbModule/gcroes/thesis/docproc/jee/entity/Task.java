@@ -86,8 +86,8 @@ public class Task implements Serializable {
         return this.finishedAt != null;
     }
 
-    public void setFinishedAt() {
-        this.finishedAt = new Date();
+    public void setFinishedAt(Date date) {
+        this.finishedAt = date;
     }
 
     public Date getStartedAt() {

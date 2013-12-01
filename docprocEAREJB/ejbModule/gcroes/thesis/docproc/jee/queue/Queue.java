@@ -19,24 +19,31 @@ Technical Contact: bart.vanbrabant@cs.kuleuven.be
 
 package gcroes.thesis.docproc.jee.queue;
 
+import gcroes.thesis.docproc.jee.entity.Job;
+import gcroes.thesis.docproc.jee.entity.Task;
+
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import javax.ejb.Stateless;
+import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import gcroes.thesis.docproc.jee.entity.Job;
-import gcroes.thesis.docproc.jee.entity.Task;
+import com.sun.mail.iap.ConnectionException;
 
 /**
 * A queue implementation on top of cassandra
 *
 * @author Bart Vanbrabant <bart.vanbrabant@cs.kuleuven.be>
 */
+@Stateless
+@WebService
 public class Queue implements Serializable{
     
      /**
@@ -50,25 +57,30 @@ public class Queue implements Serializable{
         @PersistenceContext
         EntityManager em;
         
-        private JPAQueue queue;
-        private String queueName;
-        public Queue(String queueName) {
-           this.queueName = queueName;                
-        }
-        
         public Queue(){}
         
-        public void addTask(Task task){
-            List<JPAQueueElement> jpaQueue = queue.getQueue();
-            jpaQueue.add(new JPAQueueElement(task));
+        public List<JPAQueueElement> getOpenQueue(){
+            logger.entry();
+            List<JPAQueueElement> elems = em.createNamedQuery("JPAQueueElement.findNotRemoved", JPAQueueElement.class)
+                                          .getResultList();
+            return logger.exit(elems);
+        }
+        
+        public void queueTask(Task task){
+            logger.entry();
+            JPAQueueElement elem = new JPAQueueElement(task);
+            em.persist(elem);
+            logger.exit();
         }
         
         public void finishTask(Task task){
+            logger.entry();
             JPAQueueElement elem = em.createNamedQuery("JPAQueueElement.findElemWithTask", JPAQueueElement.class)
                                         .setParameter("task", task)
                                         .getSingleResult();
-            List<JPAQueueElement> jpaQueue = queue.getQueue();
-            jpaQueue.remove(elem);
+            elem.setRemoved(true);
+            elem.getTask().setFinishedAt(new Date());
+            logger.exit();
         }
         
         /**
@@ -88,25 +100,8 @@ public class Queue implements Serializable{
          * @throws ConnectionException
          */
         public void leaseTasks(long lease, TimeUnit unit, int limit, String taskType, Job job){
-            
-        }
-        
-        public void init(){
-            if(em == null){
-                logger.fatal("Entitymanager null in init");
-            }
-            JPAQueue queue =  em.createNamedQuery("JPAQueue.findByName", JPAQueue.class)
-                   .setParameter("name", queueName)
-                   .getSingleResult();
-            if(queue != null){
-                this.queue = queue;
-                logger.info("Found queue: " + queueName);
-            }else{
-                this.queue = new JPAQueue(queueName);
-                em.persist(this.queue);
-                em.flush();
-                logger.info("Persisted new queue: " + queueName);
-            }
+            logger.entry();
+            logger.exit();
         }
 
 }
