@@ -20,7 +20,7 @@ public class App {
         logger.entry();
         logger.info("Docproc initializing...");
         logger.info("Loading config..." + cfg());
-        
+        logger.info("Done loading config");
         logger.exit();
     }
 }
