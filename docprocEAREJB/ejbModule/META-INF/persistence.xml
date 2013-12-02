@@ -7,6 +7,9 @@
         <jta-data-source>jdbc/docproc</jta-data-source>
         <class>gcroes.thesis.docproc.jee.entity.Job</class>
         <class>gcroes.thesis.docproc.jee.entity.Task</class>
-        <class>gcroes.thesis.docproc.jee.queue.JPAQueueElement</class>
+        <class>gcroes.thesis.docproc.jee.entity.JPAQueueElement</class>
+        <properties>
+        	<property name="eclipselink.logging.level" value="FINE"/>
+        </properties>
     </persistence-unit>
 </persistence>

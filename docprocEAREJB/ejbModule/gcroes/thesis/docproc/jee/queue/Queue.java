@@ -19,6 +19,7 @@ Technical Contact: bart.vanbrabant@cs.kuleuven.be
 
 package gcroes.thesis.docproc.jee.queue;
 
+import gcroes.thesis.docproc.jee.entity.JPAQueueElement;
 import gcroes.thesis.docproc.jee.entity.Job;
 import gcroes.thesis.docproc.jee.entity.Task;
 

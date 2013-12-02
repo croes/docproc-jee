@@ -55,8 +55,7 @@ public class Service implements ServiceRemote, Serializable {
     public boolean addAJob(String workflowName) {
         logger.debug("Fetching workflow: " + workflowName);
         Job j = new Job(workflowName);
-        Task startTask = new Task(j, null, "zipDocs");
-        j.setStartTask(startTask);
+        j.newStartTask();
         em.persist(j);
         em.flush();
         return true;

@@ -1,6 +1,4 @@
-package gcroes.thesis.docproc.jee.queue;
-
-import gcroes.thesis.docproc.jee.entity.Task;
+package gcroes.thesis.docproc.jee.entity;
 
 import java.io.Serializable;
 import java.util.Date;

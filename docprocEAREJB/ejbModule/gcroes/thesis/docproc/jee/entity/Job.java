@@ -1,5 +1,7 @@
 package gcroes.thesis.docproc.jee.entity;
 
+import gcroes.thesis.docproc.jee.config.Config;
+import gcroes.thesis.docproc.jee.config.WorkflowConfig;
 import gcroes.thesis.docproc.jee.monitoring.Statistic;
 import gcroes.thesis.docproc.jee.util.Serializer;
 
@@ -215,10 +217,8 @@ public class Job implements Serializable {
     }
 
     public Task newStartTask() {
-        this.startTask = new Task(this, null, "start"); // FIXME
-                                                        // "start" ->
-                                                        // this.getWorkflowConfig().getWorkflowStart());
-        // FIXME this.startTask.initJoin();
+        this.startTask = new Task(this, null, getWorkflowConfig().getWorkflowStart());
+        this.startTask.initJoin();
         return this.startTask;
     }
 
@@ -232,6 +232,10 @@ public class Job implements Serializable {
     public void calcStats() {
         // TODO Auto-generated method stub
 
+    }
+    
+    public WorkflowConfig getWorkflowConfig(){
+        return Config.getConfig().getWorkflow(workflowName);
     }
 
 }
