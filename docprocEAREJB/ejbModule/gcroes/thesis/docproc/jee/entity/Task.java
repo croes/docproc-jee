@@ -56,15 +56,15 @@ public class Task implements Serializable {
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Task parentTask;
-    
-//    @OneToMany(cascade=CascadeType.ALL)
-//    @JoinColumn(name = "task_id")
-//    private List<Parameter> params;
-    
+
+    // @OneToMany(cascade=CascadeType.ALL)
+    // @JoinColumn(name = "task_id")
+    // private List<Parameter> params;
+
     @ElementCollection
-    @CollectionTable(name="param", joinColumns=@JoinColumn(name="task_id"))
-    @Column(name="param_value")
-    @MapKeyColumn(name="param_key")
+    @CollectionTable(name = "param", joinColumns = @JoinColumn(name = "task_id"))
+    @Column(name = "param_value")
+    @MapKeyColumn(name = "param_key")
     @Lob
     private Map<String, byte[]> params = new HashMap<String, byte[]>();
 
@@ -99,8 +99,8 @@ public class Task implements Serializable {
     public Date getFinishedAt() {
         return this.finishedAt;
     }
-    
-    public boolean isFinished(){
+
+    public boolean isFinished() {
         return this.finishedAt != null;
     }
 
@@ -124,7 +124,8 @@ public class Task implements Serializable {
         this.workerName = workerName;
     }
 
-    @XmlTransient //to avoid infinite xml
+    @XmlTransient
+    // to avoid infinite xml
     public Job getJob() {
         return this.job;
     }
@@ -143,27 +144,47 @@ public class Task implements Serializable {
 
     public void saveTiming() {
         // TODO Auto-generated method stub
-        
+
     }
-    
-    public void addParam(String key, Object value){
+
+    /**
+     * Remove a parameter from the parameter map
+     * 
+     * @param key
+     * @return the value of the (key, value) pair that was removed, or null if
+     *         no pair was present
+     */
+    public Object removeParam(String key) {
         try {
-            params.put(key, Serializer.serialize(value));
-        } catch (IOException e) {
+            return Serializer.deserialize(params.remove(key));
+        } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
-    
-    public void removeParam(String key){
-        params.remove(key);
-    }
-    
-    public Object getParamValue(String key){
+
+    public Object getParamValue(String key) {
         return params.get(key);
     }
 
+    /**
+     * Insert or update a (key,value) pair into the parameter map
+     * 
+     * @param key
+     * @param value
+     * @return null if new (key,value) pair, previous value if update
+     */
+    public Object putParam(String key, Object value){
+        try {
+            return Serializer.deserialize(params.put(key, Serializer.serialize(value)));
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void initJoin() {
-        this.addParam(JOIN_PARAM, "");
+        this.putParam(JOIN_PARAM, "");
     }
 
 }
